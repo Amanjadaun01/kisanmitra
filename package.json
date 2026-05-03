@@ -1,0 +1,15 @@
+{
+  "name": "kisanmitra",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Unified farmer intelligence platform for India",
+  "scripts": {
+    "dev": "concurrently \"cd server && nodemon server.js\" \"cd client && npm run dev\"",
+    "seed": "node server/data/seedMandi.js && node server/data/seedSchemes.js",
+    "install-all": "npm install && cd client && npm install && cd ../server && npm install",
+    "start": "node server/server.js"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
