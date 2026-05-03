@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import bcryptjs from 'bcryptjs';
 import User from '../models/User.js';
 import MandiPrice from '../models/MandiPrice.js';
 import Post from '../models/Post.js';
@@ -65,7 +65,7 @@ const run = async () => {
   await mongoose.connect(process.env.MONGO_URI);
   await Promise.all([MandiPrice.deleteMany(), Post.deleteMany(), Comment.deleteMany(), User.deleteMany({ phone: /^9/ })]);
   await MandiPrice.insertMany(mandiData);
-  const password = await bcrypt.hash('password123', 10);
+  const password = await bcryptjs.hash('password123', 10);
   const users = await User.insertMany(sampleUsers.map(([name, phone, district, landSize, primaryCrop, role = 'farmer']) => ({
     name,
     phone,
