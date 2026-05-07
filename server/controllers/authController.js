@@ -16,15 +16,37 @@ const userResponse = (user) => ({
 });
 
 export const register = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-  const { name, phone, password, district, state, landSize, primaryCrop, role } = req.body;
-  const exists = await User.findOne({ phone });
-  if (exists) return res.status(400).json({ message: 'Phone number already registered.' });
+    const {
+      name,
+      phone,
+      password,
+      district,
+      state = 'Uttar Pradesh',
+      landSize,
+      primaryCrop,
+      role = 'farmer'
+    } = req.body;
+    const exists = await User.findOne({ phone });
+    if (exists) return res.status(400).json({ message: 'Phone number already registered.' });
 
-  const user = await User.create({ name, phone, password, district, state, landSize, primaryCrop, role });
-  res.status(201).json({ token: signToken(user._id), user: userResponse(user) });
+    const user = await User.create({
+      name,
+      phone,
+      password,
+      district,
+      state,
+      landSize: Number(landSize),
+      primaryCrop,
+      role
+    });
+    return res.status(201).json({ token: signToken(user._id), user: userResponse(user) });
+  } catch (error) {
+    return res.status(500).json({ message: error.message || 'Unable to register. Please try again.' });
+  }
 };
 
 export const login = async (req, res) => {

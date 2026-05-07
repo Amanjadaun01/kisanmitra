@@ -13,7 +13,20 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors());
+const allowedOrigins = (process.env.CLIENT_URL || 'https://kisanmitra-zeta.vercel.app,http://localhost:5173')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true
+}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/api/health', (req, res) => res.json({ ok: true, app: 'KisanMitra' }));
 app.use('/api/auth', authRoutes);

@@ -6,10 +6,12 @@ import { protect } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 router.post('/register', [
-  body('name').notEmpty().withMessage('Name is required.'),
-  body('phone').isLength({ min: 10 }).withMessage('Valid phone is required.'),
+  body('name').trim().notEmpty().withMessage('Name is required.'),
+  body('phone').trim().isLength({ min: 10 }).withMessage('Valid phone is required.'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters.'),
-  body('district').notEmpty().withMessage('District is required.')
+  body('district').trim().notEmpty().withMessage('District is required.'),
+  body('landSize').isFloat({ min: 0 }).withMessage('Valid land size is required.'),
+  body('primaryCrop').trim().notEmpty().withMessage('Primary crop is required.')
 ], register);
 router.post('/login', login);
 router.get('/me', protect, me);
