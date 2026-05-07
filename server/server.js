@@ -13,8 +13,15 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors({ origin: ['http://localhost:5173', 'http://127.0.0.1:5173'], credentials: true }));
-app.use(express.json());
+app.use(cors({ 
+  origin: [
+    'http://localhost:5173', 
+    'http://127.0.0.1:5173',
+    'https://kisanmitra-5tcp7ie84-amanjadaun01s-projects.vercel.app',
+    'https://kisanmitra.vercel.app'
+  ], 
+  credentials: true 
+}));
 
 app.get('/api/health', (req, res) => res.json({ ok: true, app: 'KisanMitra' }));
 app.use('/api/auth', authRoutes);
